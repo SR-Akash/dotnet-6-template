@@ -1,0 +1,2 @@
+﻿
+dotnet ef dbcontext scaffold "Data Source=AKASH-300174;Initial Catalog=CRUD_DB;Connect Timeout=30;Encrypt=False;Trusted_Connection=true;TrustServerCertificate=False;ApplicationIntent=ReadWrite;" Microsoft.EntityFrameworkCore.SqlServer -o "Models" -c "AppDbContext" --context-dir "DBContext" -t dbo.tblUser -t dbo.tblStudent -f --project "D:\Personal\Project\master-api-dotnet-6\master-api-dotnet 6\master-api-dotnet 6.csproj"

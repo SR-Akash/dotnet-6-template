@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\MGM_Lite.props" />
+</Project>
