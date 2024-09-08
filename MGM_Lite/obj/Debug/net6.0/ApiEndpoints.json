@@ -1,5 +1,53 @@
 [
   {
+    "ContainingType": "MGM_Lite.Controllers.AuthController",
+    "Method": "UserLogIn",
+    "RelativePath": "api/Auth/UserLogIn",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "MGM_Lite.DTO.AuthDTO.UserLogInDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "CreateItem",
+    "RelativePath": "api/Configuration/CreateItem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "create",
+        "Type": "MGM_Lite.DTO.ConfigurationDTO.ItemsDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "GetItemList",
+    "RelativePath": "api/Configuration/GetItemList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MGM_Lite.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",
