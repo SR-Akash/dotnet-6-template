@@ -19,6 +19,10 @@ namespace MGM_Lite.DBContext
 
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<Item> Items { get; set; } = null!;
+        public virtual DbSet<Partner> Partners { get; set; } = null!;
+        public virtual DbSet<PartnerType> PartnerTypes { get; set; } = null!;
+        public virtual DbSet<PurchaseReceiveHeader> PurchaseReceiveHeaders { get; set; } = null!;
+        public virtual DbSet<PurchaseReceiveRow> PurchaseReceiveRows { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -70,6 +74,62 @@ namespace MGM_Lite.DBContext
                 entity.Property(e => e.ItemName).HasMaxLength(250);
 
                 entity.Property(e => e.UomName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Partner>(entity =>
+            {
+                entity.ToTable("Partner");
+
+                entity.Property(e => e.Address).HasMaxLength(500);
+
+                entity.Property(e => e.Mobile).HasMaxLength(50);
+
+                entity.Property(e => e.PartnerCode).HasMaxLength(50);
+
+                entity.Property(e => e.PartnerName).HasMaxLength(500);
+
+                entity.Property(e => e.PartnerTypeName).HasMaxLength(150);
+            });
+
+            modelBuilder.Entity<PartnerType>(entity =>
+            {
+                entity.ToTable("PartnerType");
+
+                entity.Property(e => e.PartnerTypeName).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<PurchaseReceiveHeader>(entity =>
+            {
+                entity.HasKey(e => e.PurchaseReceiveId);
+
+                entity.ToTable("PurchaseReceiveHeader");
+
+                entity.Property(e => e.ReceiveCode).HasMaxLength(50);
+
+                entity.Property(e => e.ReceivedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Remarks).HasMaxLength(500);
+
+                entity.Property(e => e.SupplierName).HasMaxLength(250);
+
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 6)");
+
+                entity.Property(e => e.TotalQty).HasColumnType("decimal(18, 6)");
+            });
+
+            modelBuilder.Entity<PurchaseReceiveRow>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("PurchaseReceiveRow");
+
+                entity.Property(e => e.ItemName).HasMaxLength(250);
+
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 6)");
+
+                entity.Property(e => e.Rate).HasColumnType("decimal(18, 6)");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 6)");
             });
 
             modelBuilder.Entity<User>(entity =>

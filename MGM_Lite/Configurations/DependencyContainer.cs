@@ -11,6 +11,7 @@ namespace MGM_Lite.Configurations
         {
             builder.RegisterType<Login>().As<ILogin>();
             builder.RegisterType<ConfigurationModule>().As<IConfigurationModule>();
+            builder.RegisterType<Purchase>().As<IPurchase>();
         }
     }
 }

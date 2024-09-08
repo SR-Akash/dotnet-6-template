@@ -33,8 +33,77 @@
   },
   {
     "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "CreatePartner",
+    "RelativePath": "api/Configuration/CreatePartner",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "create",
+        "Type": "MGM_Lite.DTO.ConfigurationDTO.PartnerDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
     "Method": "GetItemList",
     "RelativePath": "api/Configuration/GetItemList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "GetPartnerList",
+    "RelativePath": "api/Configuration/GetPartnerList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "partnerTypeId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.PurchaseController",
+    "Method": "CreatePurchaseReceive",
+    "RelativePath": "api/Purchase/CreatePurchaseReceive",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "create",
+        "Type": "MGM_Lite.DTO.PurchaseDTO.PurchaseCommonDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.PurchaseController",
+    "Method": "GetPurchaseReceivedList",
+    "RelativePath": "api/Purchase/GetPurchaseReceivedList",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

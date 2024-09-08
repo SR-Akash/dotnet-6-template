@@ -15,6 +15,7 @@ namespace MGM_Lite.Controllers
         {
             _IRepository = IRepository;
         }
+
         [HttpGet]
         [Route("GetItemList")]
         public async Task<IActionResult> GetItemList(long accountId)
@@ -28,6 +29,22 @@ namespace MGM_Lite.Controllers
         public async Task<IActionResult> CreateItem(ItemsDTO create)
         {
             return Ok((await _IRepository.CreateItem(create)));
+
+        }
+
+        [HttpGet]
+        [Route("GetPartnerList")]
+        public async Task<IActionResult> GetPartnerList(long accountId, long partnerTypeId)
+        {
+            return Ok((await _IRepository.GetPartnerList(accountId, partnerTypeId)));
+
+        }
+
+        [HttpPost]
+        [Route("CreatePartner")]
+        public async Task<IActionResult> CreatePartner(PartnerDTO create)
+        {
+            return Ok((await _IRepository.CreatePartner(create)));
 
         }
     }
