@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MGM_Lite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+48db29b389275f9b02605c36a16001917385197f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dcf473391b4a8633e29ddac651b45eb0063f0249")]
 [assembly: System.Reflection.AssemblyProductAttribute("MGM_Lite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MGM_Lite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

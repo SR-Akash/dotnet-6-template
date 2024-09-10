@@ -1,6 +1,7 @@
 ﻿using MGM_Lite.DBContext;
 using MGM_Lite.DTO;
 using MGM_Lite.IRepository;
+using MGM_Lite.Models;
 
 namespace MGM_Lite.Repository
 {
@@ -59,32 +60,57 @@ namespace MGM_Lite.Repository
                 var existingData = _context.ChartofAccs.Where(x => x.AccountId == accountId && x.TemplateId > 0).ToList();
                 if (existingData.Any())
                 {
-                    var updateList = new List<Models.ChartofAcc>();
-                    foreach(var itm in existingData)
+                    var inActiveList = new List<Models.ChartofAcc>();
+                    foreach (var itm in existingData)
                     {
                         itm.IsActive = false;
-                        updateList.Add(itm);
+                        inActiveList.Add(itm);
                     }
+                    _context.ChartofAccs.UpdateRange(inActiveList);
+                    await _context.SaveChangesAsync();
+                }
+
+                var updateList = new List<Models.ChartofAcc>(create.Count());
+                var newList = new List<Models.ChartofAcc>(create.Count());
+                foreach (var itm in create)
+                {
+                    var coa = _context.ChartofAccs.Where(x => x.AccountId == accountId && x.ChartOfAccName.Trim().ToLower() == itm.ChartOfAccName.Trim().ToLower()).Select(x => x).FirstOrDefault();
+                    if (coa != null)
+                    {
+                        coa.IsActive = true;
+                        updateList.Add(coa);
+                    }
+                    else
+                    {
+                        var coaData = new Models.ChartofAcc
+                        {
+                            AccountId = accountId,
+                            ActionById = itm.ActionById,
+                            BranchId = itm.BranchId,
+                            ChartOfAccCategoryId = itm.ChartOfAccCategoryId,
+                            ChartOfAccCategoryName = itm.ChartOfAccCategoryName,
+                            ChartOfAccCode = itm.ChartOfAccCode,
+                            ChartOfAccName = itm.ChartOfAccName,
+                            IsActive = true,
+                            LastActionDateTime = DateTime.Now,
+                            TemplateId = itm.TemplateId
+                        };
+                        newList.Add(coaData);
+                    }
+                }
+
+                if (updateList.Any())
+                {
                     _context.ChartofAccs.UpdateRange(updateList);
                     await _context.SaveChangesAsync();
                 }
 
-                var newList = create.Select(x => new Models.ChartofAcc
+                if (newList.Any())
                 {
-                    AccountId = accountId,
-                    ActionById = x.ActionById,
-                    BranchId = x.BranchId,
-                    ChartOfAccCategoryId = x.ChartOfAccCategoryId,
-                    ChartOfAccCategoryName = x.ChartOfAccCategoryName,
-                    ChartOfAccCode = x.ChartOfAccCode,
-                    ChartOfAccName = x.ChartOfAccName,
-                    IsActive = true,
-                    LastActionDateTime = DateTime.Now,
-                    TemplateId = x.TemplateId
-                }).ToList();
+                    await _context.ChartofAccs.AddRangeAsync(newList);
+                    await _context.SaveChangesAsync();
+                }
 
-                await _context.ChartofAccs.AddRangeAsync(newList);
-                await _context.SaveChangesAsync();
 
 
                 return new MessageHelper
