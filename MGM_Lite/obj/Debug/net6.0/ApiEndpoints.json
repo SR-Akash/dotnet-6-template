@@ -1,5 +1,111 @@
 [
   {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "CreateChartofAcc",
+    "RelativePath": "api/Accounts/CreateChartofAcc",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "create",
+        "Type": "MGM_Lite.DTO.ChartofAccDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "CreateChartofAccTemplate",
+    "RelativePath": "api/Accounts/CreateChartofAccTemplate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "create",
+        "Type": "System.Collections.Generic.List\u00601[[MGM_Lite.DTO.ChartofAccTemplateDTO, MGM_Lite, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "GetChartOfAccCategoryList",
+    "RelativePath": "api/Accounts/GetChartOfAccCategoryList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "GetChartofAccList",
+    "RelativePath": "api/Accounts/GetChartofAccList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "GetChartofAccListTemplate",
+    "RelativePath": "api/Accounts/GetChartofAccListTemplate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "UpdateChartofAcc",
+    "RelativePath": "api/Accounts/UpdateChartofAcc",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "create",
+        "Type": "MGM_Lite.DTO.ChartofAccDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MGM_Lite.Controllers.AuthController",
     "Method": "UserLogIn",
     "RelativePath": "api/Auth/UserLogIn",

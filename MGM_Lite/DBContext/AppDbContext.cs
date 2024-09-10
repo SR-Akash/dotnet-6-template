@@ -17,6 +17,9 @@ namespace MGM_Lite.DBContext
         {
         }
 
+        public virtual DbSet<ChartOfAccCategory> ChartOfAccCategories { get; set; } = null!;
+        public virtual DbSet<ChartofAcc> ChartofAccs { get; set; } = null!;
+        public virtual DbSet<ChartofAccTemplate> ChartofAccTemplates { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<Item> Items { get; set; } = null!;
         public virtual DbSet<Partner> Partners { get; set; } = null!;
@@ -36,6 +39,39 @@ namespace MGM_Lite.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ChartOfAccCategory>(entity =>
+            {
+                entity.ToTable("ChartOfAccCategory");
+
+                entity.Property(e => e.ChartOfAccCategoryName).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<ChartofAcc>(entity =>
+            {
+                entity.ToTable("ChartofAcc");
+
+                entity.Property(e => e.ChartOfAccCategoryName).HasMaxLength(200);
+
+                entity.Property(e => e.ChartOfAccCode).HasMaxLength(50);
+
+                entity.Property(e => e.ChartOfAccName).HasMaxLength(300);
+
+                entity.Property(e => e.LastActionDateTime).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ChartofAccTemplate>(entity =>
+            {
+                entity.HasKey(e => e.TemplateId);
+
+                entity.ToTable("ChartofAccTemplate");
+
+                entity.Property(e => e.ChartOfAccCategoryName).HasMaxLength(300);
+
+                entity.Property(e => e.ChartOfAccCode).HasMaxLength(50);
+
+                entity.Property(e => e.ChartOfAccName).HasMaxLength(300);
+            });
+
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.Property(e => e.BloodGroup).HasMaxLength(5);
