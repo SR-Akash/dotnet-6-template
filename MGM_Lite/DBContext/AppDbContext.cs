@@ -26,6 +26,8 @@ namespace MGM_Lite.DBContext
         public virtual DbSet<PartnerType> PartnerTypes { get; set; } = null!;
         public virtual DbSet<PurchaseReceiveHeader> PurchaseReceiveHeaders { get; set; } = null!;
         public virtual DbSet<PurchaseReceiveRow> PurchaseReceiveRows { get; set; } = null!;
+        public virtual DbSet<SubLedgerHeader> SubLedgerHeaders { get; set; } = null!;
+        public virtual DbSet<SubLedgerRow> SubLedgerRows { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -166,6 +168,48 @@ namespace MGM_Lite.DBContext
                 entity.Property(e => e.Rate).HasColumnType("decimal(18, 6)");
 
                 entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 6)");
+            });
+
+            modelBuilder.Entity<SubLedgerHeader>(entity =>
+            {
+                entity.ToTable("SubLedgerHeader");
+
+                entity.Property(e => e.ActionByName).HasMaxLength(350);
+
+                entity.Property(e => e.ActionDatetime).HasColumnType("datetime");
+
+                entity.Property(e => e.Attachment).HasMaxLength(250);
+
+                entity.Property(e => e.BankAccNumber).HasMaxLength(250);
+
+                entity.Property(e => e.ExtraTransactionCode).HasMaxLength(50);
+
+                entity.Property(e => e.InstrumentNo).HasMaxLength(250);
+
+                entity.Property(e => e.InstrumentType).HasMaxLength(250);
+
+                entity.Property(e => e.ManualNarration).HasMaxLength(2000);
+
+                entity.Property(e => e.Narration).HasMaxLength(2000);
+
+                entity.Property(e => e.SubLedgerCode).HasMaxLength(50);
+
+                entity.Property(e => e.TransactionCode).HasMaxLength(250);
+
+                entity.Property(e => e.TransactionDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TransactionTypeName).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<SubLedgerRow>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("SubLedgerRow");
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 6)");
+
+                entity.Property(e => e.ChartOfAccName).HasMaxLength(500);
             });
 
             modelBuilder.Entity<User>(entity =>

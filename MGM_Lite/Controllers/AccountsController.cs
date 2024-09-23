@@ -45,7 +45,7 @@ namespace MGM_Lite.Controllers
         [Route("GetChartofAccList")]
         public async Task<IActionResult> GetChartofAccList(long accountId, string? search)
         {
-            return Ok((await _IRepository.GetChartofAccList(accountId,search)));
+            return Ok((await _IRepository.GetChartofAccList(accountId, search)));
 
         }
 
@@ -62,6 +62,22 @@ namespace MGM_Lite.Controllers
         public async Task<IActionResult> GetChartOfAccCategoryList(long accountId)
         {
             return Ok((await _IRepository.GetChartOfAccCategoryList(accountId)));
+
+        }
+
+        [HttpGet]
+        [Route("GetJournalVoucherLandingPagination")]
+        public async Task<IActionResult> GetJournalVoucherLandingPagination(long accountId, DateTime? fromDate, DateTime? toDate, string? search, string viewOrder, long pageNo, long pageSize)
+        {
+            return Ok((await _IRepository.GetJournalVoucherLandingPagination(accountId, fromDate, toDate, search, viewOrder, pageNo, pageSize)));
+
+        }
+
+        [HttpGet]
+        [Route("GetJournalVoucherById")]
+        public async Task<IActionResult> GetJournalVoucherById(long journalId)
+        {
+            return Ok((await _IRepository.GetJournalVoucherById(journalId)));
 
         }
     }

@@ -2,6 +2,9 @@
 using MGM_Lite.DTO;
 using MGM_Lite.IRepository;
 using MGM_Lite.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MGM_Lite.Repository
 {
@@ -167,7 +170,8 @@ namespace MGM_Lite.Repository
                                 ChartOfAccCategoryName = c.ChartOfAccCategoryName,
                                 ChartOfAccCode = c.ChartOfAccCode,
                                 ChartofAccId = c.ChartofAccId,
-                                ChartOfAccName = c.ChartOfAccName
+                                ChartOfAccName = c.ChartOfAccName,
+                                TemplateId = c.TemplateId
                             }).ToList();
 
                 return data;
@@ -208,6 +212,7 @@ namespace MGM_Lite.Repository
             }
         }
 
+
         public async Task<MessageHelper> UpdateChartofAcc(ChartofAccDTO create)
         {
             try
@@ -227,6 +232,121 @@ namespace MGM_Lite.Repository
                 {
                     message = "Update successfully",
                     statusCode = 200
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        public async Task<JournalVoucherLandingPaginationDTO> GetJournalVoucherLandingPagination(long accountId, DateTime? fromDate, DateTime? toDate, string? search, string viewOrder, long pageNo, long pageSize)
+        {
+            var totalCount = _context.SubLedgerHeaders.Where(x => x.AccountId == accountId && x.IsActive == true).Select(x => x.SubLedgerHeaderId).Count();
+            var itemdata = (from x in _context.SubLedgerHeaders
+
+                            where x.AccountId == accountId
+                            && (fromDate == null || x.TransactionDate.Date >= fromDate.Value.Date)
+                            && (toDate == null || x.TransactionDate.Date <= toDate.Value.Date)
+                            && (search == null
+                            || x.SubLedgerCode.Trim().Contains(search.Trim())
+                            || x.TransactionTypeName.Trim().Contains(search.Trim())
+                            || x.TransactionCode.Trim().Contains(search.Trim()))
+                             && x.IsActive == true
+                            orderby x.TransactionDate.Date descending, x.SubLedgerHeaderId descending
+
+                            select new JournalVoucherHeaderDTO
+                            {
+                                SubLedgerHeaderId = x.SubLedgerHeaderId,
+                                SubLedgerCode = x.SubLedgerCode,
+                                AccountId = x.AccountId,
+                                BranchId = x.BranchId,
+                                Narration = x.Narration,
+                                Amount = _context.SubLedgerRows.Where(a => a.SubLedgerHeaderId == x.SubLedgerHeaderId && a.Amount > 0).Select(b => b.Amount).Sum(),
+                                TransactionId = x.TransactionId,
+                                TransactionCode = x.TransactionCode,
+                                TransactionTypeId = x.TransactionTypeId,
+                                TransactionTypeName = x.TransactionTypeName,
+                                InstrumentType = x.InstrumentType,
+                                ActionById = x.ActionById,
+                                ActionByName = x.ActionByName,
+                                TransactionDate = x.TransactionDate
+                            }).Skip((int)((pageNo - 1) * pageSize)).Take((int)pageSize).ToList();
+
+
+            if (pageNo <= 0)
+                pageNo = 1;
+
+            var finalData = itemdata.Where(x => x.Amount > 0).ToList();
+            long index = 1 + ((pageNo - 1) * pageSize);
+            foreach (var item in finalData)
+            {
+                item.Sl = index;
+                index++;
+            }
+
+            var itm = new JournalVoucherLandingPaginationDTO
+            {
+                data = finalData,
+                CurrentPage = pageNo,
+                TotalCount = totalCount,
+                PageSize = pageSize
+            };
+
+            return itm;
+        }
+
+        public async Task<JournalVoucherCommonDTO> GetJournalVoucherById(long journalId)
+        {
+            try
+            {
+                var headerData = (from x in _context.SubLedgerHeaders
+
+                                  where x.SubLedgerHeaderId == journalId
+                                  orderby x.TransactionDate.Date descending, x.SubLedgerHeaderId descending
+
+                                  select new JournalVoucherHeaderDTO
+                                  {
+                                      SubLedgerHeaderId = x.SubLedgerHeaderId,
+                                      SubLedgerCode = x.SubLedgerCode,
+                                      AccountId = x.AccountId,
+                                      BranchId = x.BranchId,
+                                      Narration = x.Narration,
+                                      Amount = _context.SubLedgerRows.Where(a => a.SubLedgerHeaderId == x.SubLedgerHeaderId && a.Amount > 0).Select(b => b.Amount).Sum(),
+                                      TransactionId = x.TransactionId,
+                                      TransactionCode = x.TransactionCode,
+                                      TransactionTypeId = x.TransactionTypeId,
+                                      TransactionTypeName = x.TransactionTypeName,
+                                      InstrumentType = x.InstrumentType,
+                                      ActionById = x.ActionById,
+                                      ActionByName = x.ActionByName,
+                                      TransactionDate = x.TransactionDate,
+                                      InstrumentNo = x.InstrumentNo
+                                  }).FirstOrDefault();
+
+                var rowsData = (from a in _context.SubLedgerRows
+                                join c in _context.ChartofAccs on a.ChartOfAccId equals c.ChartofAccId
+
+                                where a.SubLedgerHeaderId == journalId
+                                select new JournalVoucherRowDTO
+                                {
+                                    ChartOfAccId = a.ChartOfAccId,
+                                    ChartOfAccName = c.ChartOfAccName,
+                                    Amount = a.Amount,
+                                    PartnerId = 0,
+                                    PartnerName = a.PartnerId > 0 ? _context.Partners.Where(x => x.PartnerId == a.PartnerId
+                                                      ).Select(x => x.PartnerName).FirstOrDefault() : "",
+
+                                    ChartOfAccCode = c.ChartOfAccCode,
+                                    SubLedgerHeaderId = a.SubLedgerHeaderId,
+                                    RowId = a.RowId
+                                }).ToList();
+
+                return new JournalVoucherCommonDTO
+                {
+                    header = headerData,
+                    rows = rowsData
                 };
             }
             catch (Exception ex)
