@@ -185,6 +185,22 @@
   },
   {
     "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "CreateBankAccount",
+    "RelativePath": "api/Configuration/CreateBankAccount",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "MGM_Lite.DTO.ConfigurationDTO.BankAccountDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
     "Method": "CreateItem",
     "RelativePath": "api/Configuration/CreateItem",
     "HttpMethod": "POST",
@@ -213,6 +229,63 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "GetBankAccountLandingPagination",
+    "RelativePath": "api/Configuration/GetBankAccountLandingPagination",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "branchId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "GetBankAccountType",
+    "RelativePath": "api/Configuration/GetBankAccountType",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "GetBankBranch",
+    "RelativePath": "api/Configuration/GetBankBranch",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bankId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.ConfigurationController",
+    "Method": "GetBankName",
+    "RelativePath": "api/Configuration/GetBankName",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

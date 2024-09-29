@@ -3,6 +3,7 @@ using MGM_Lite.DTO;
 using MGM_Lite.DTO.AuthDTO;
 using MGM_Lite.DTO.ConfigurationDTO;
 using MGM_Lite.IRepository;
+using MGM_Lite.Models;
 using Microsoft.Extensions.Options;
 
 namespace MGM_Lite.Repository
@@ -13,6 +14,116 @@ namespace MGM_Lite.Repository
         public ConfigurationModule(AppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<MessageHelper> CreateBankAccount(BankAccountDTO obj)
+        {
+            var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var result = _context.BankAccounts.FirstOrDefault(x =>
+                    x.BankId == obj.BankId && x.BankAccountNumber == obj.BankAccountNumber && x.AccountId == obj.AccountId
+                    && x.BranchId == obj.BranchId);
+
+                if (result != null)
+                    throw new Exception("Bank Account Number Already Exist");
+
+
+                var details = new BankAccount
+                {
+                    AccountId = obj.AccountId,
+                    BranchId = obj.BranchId,
+                    ActionById = obj.ActionById,
+                    BankAccHolderName = obj.BankAccHolderName,
+                    BankAccountId = obj.BankAccountId,
+                    BankAccountNumber = obj.BankAccountNumber,
+                    BankAccountTypeId = obj.BankAccountTypeId,
+                    BankAccountTypeName = obj.BankAccountTypeName,
+                    BankBranchId = obj.BankBranchId,
+                    BankBranchName = obj.BankBranchName,
+                    BankId = obj.BankId,
+                    BankName = obj.BankName,
+                    BankShortCode = obj.BankShortCode,
+                    ChartofAccId = 0,
+                    LastActionDatetime = DateTime.Now,
+                    RoutingNumber = obj.RoutingNumber,
+                };
+
+                await _context.BankAccounts.AddAsync(details);
+                await _context.SaveChangesAsync();
+
+                var chartOfCode = await Task.FromResult((from a in _context.ChartofAccs
+                                                         where a.AccountId == obj.AccountId
+                                                         && a.BranchId == obj.BranchId
+                                                         orderby a.ChartofAccId descending
+                                                         select a.ChartOfAccCode).FirstOrDefault());
+
+                if (obj.BankAccountTypeId != 8) // Bank Overdraft (OD) Account
+                {
+                    var code = Convert.ToInt32(chartOfCode) + 1;
+                    var bankaccountTypeId = new List<long> { 3, 4 }; // Fixed Deposit Account,Recurring Deposit Account
+                    var chartofAcc = new Models.ChartofAcc();
+                    if (bankaccountTypeId.Contains(obj.BankAccountTypeId))
+                    {
+                        // var chartofacccategoryid = _context.ChartOfAccCategories.Where(x => x.ChartOfAccCategoryName == "FDR and DPS").Select(x => x.ChartOfAccCategoryId).FirstOrDefault();
+                        chartofAcc = new Models.ChartofAcc
+                        {
+                            ChartOfAccName = details.BankShortCode + ": " + details.BankAccountNumber,
+                            ChartOfAccCode = code.ToString(),
+                            AccountId = details.AccountId,
+                            ChartOfAccCategoryId = 1,
+                            ChartOfAccCategoryName = "Current Assets",
+                            IsActive = true,
+                            ActionById = obj.ActionById,
+                            BranchId = obj.BranchId,
+                            LastActionDateTime = DateTime.Now,
+                            TemplateId = 2
+                        };
+
+                        await _context.ChartofAccs.AddAsync(chartofAcc);
+                        await _context.SaveChangesAsync();
+
+                        details.ChartofAccId = chartofAcc.ChartofAccId;
+
+                        _context.BankAccounts.Update(details);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        chartofAcc = new Models.ChartofAcc
+                        {
+                            ChartOfAccName = details.BankShortCode + ": " + details.BankAccountNumber,
+                            ChartOfAccCode = code.ToString(),
+                            AccountId = details.AccountId,
+                            ChartOfAccCategoryId = 1,
+                            ChartOfAccCategoryName = "Current Assets",
+                            IsActive = true,
+                            ActionById = obj.ActionById,
+                            BranchId = obj.BranchId,
+                            LastActionDateTime = DateTime.Now,
+                            TemplateId = 2,
+
+                        };
+
+                        await _context.ChartofAccs.AddAsync(chartofAcc);
+                        await _context.SaveChangesAsync();
+
+                        details.ChartofAccId = chartofAcc.ChartofAccId;
+
+                        _context.BankAccounts.Update(details);
+                        await _context.SaveChangesAsync();
+                    }
+
+                }
+                await transaction.CommitAsync();
+                var msg = new MessageHelper { message = "Created Successfully", statusCode = 200 };
+                return msg;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
         }
 
         public async Task<MessageHelper> CreateItem(ItemsDTO create)
@@ -102,6 +213,93 @@ namespace MGM_Lite.Repository
             catch (Exception ex) { throw ex; }
         }
 
+        public async Task<List<BankAccountDTO>> GetBankAccountLandingPagination(long accountId, long branchId)
+        {
+            try
+            {
+                var data = (from h in _context.BankAccounts
+                            where h.BranchId == branchId
+                            && h.AccountId == accountId
+                            select new BankAccountDTO
+                            {
+                                AccountId = h.AccountId,
+                                BranchId = h.BranchId,
+                                ActionById = h.ActionById,
+                                BankAccHolderName = h.BankAccHolderName,
+                                BankAccountId = h.BankAccountId,
+                                BankAccountNumber = h.BankAccountNumber,
+                                BankAccountTypeId = h.BankAccountTypeId,
+                                BankAccountTypeName = h.BankAccountTypeName,
+                                BankBranchId = h.BankBranchId,
+                                BankBranchName = h.BankBranchName,
+                                BankId = h.BankId,
+                                BankName = h.BankName,
+                                BankShortCode = h.BankShortCode,
+                                ChartofAccId = h.ChartofAccId,
+                                RoutingNumber = h.RoutingNumber
+                            }).ToList();
+                return data;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public async Task<object> GetBankAccountType()
+        {
+            try
+            {
+                var data = _context.BankAccountTypes.Select(x => new
+                {
+                    BankAccountTypeId = x.BankAccountTypeId,
+                    BankAccountTypeNmae = x.BankAccountTypeName
+                }).ToList();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<object> GetBankBranch(long bankId)
+        {
+            try
+            {
+                var data = _context.BankBranches.Where(x => x.BankId == bankId && x.IsActive == true).Select(x => new
+                {
+                    BankBranchId = x.BankBranchId,
+                    BankBranchCode = x.BankBranchCode,
+                    BankBranchName = x.BankBranchName,
+                    RoutingNumber = x.RoutingNo
+                }).ToList();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<object> GetBankName()
+        {
+            try
+            {
+                var data = _context.Banks.Where(x => x.IsActive == true).Select(x => new
+                {
+                    BankId = x.BankId,
+                    BankName = x.BankName,
+                    ShortName = x.ShortName
+                }).ToList();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<object> GetItemList(long accountId)
         {
             var data = _context.Items.Where(x => x.AccountId == accountId).Select(x => new
@@ -117,7 +315,7 @@ namespace MGM_Lite.Repository
 
         public async Task<List<PartnerDTO>> GetPartnerList(long accountId, long partnerTypeId)
         {
-            var data = _context.Partners.Where(x => x.AccountId == accountId && x.PartnerTypeId==partnerTypeId).Select(x => new PartnerDTO
+            var data = _context.Partners.Where(x => x.AccountId == accountId && x.PartnerTypeId == partnerTypeId).Select(x => new PartnerDTO
             {
                 PartnerId = x.PartnerId,
                 PartnerName = x.PartnerName,
@@ -128,5 +326,7 @@ namespace MGM_Lite.Repository
 
             return data;
         }
+
+
     }
 }

@@ -47,5 +47,48 @@ namespace MGM_Lite.Controllers
             return Ok((await _IRepository.CreatePartner(create)));
 
         }
+
+
+        [HttpGet]
+        [Route("GetBankName")]
+        public async Task<IActionResult> GetBankName()
+        {
+            return Ok((await _IRepository.GetBankName()));
+
+        }
+
+
+        [HttpGet]
+        [Route("GetBankBranch")]
+        public async Task<IActionResult> GetBankBranch(long bankId)
+        {
+            return Ok((await _IRepository.GetBankBranch(bankId)));
+
+        }
+
+
+        [HttpGet]
+        [Route("GetBankAccountType")]
+        public async Task<IActionResult> GetBankAccountType()
+        {
+            return Ok((await _IRepository.GetBankAccountType()));
+
+        }
+
+        [HttpPost]
+        [Route("CreateBankAccount")]
+        public async Task<IActionResult> CreateBankAccount(BankAccountDTO obj)
+        {
+            return Ok((await _IRepository.CreateBankAccount(obj)));
+
+        }
+
+        [HttpGet]
+        [Route("GetBankAccountLandingPagination")]
+        public async Task<IActionResult> GetBankAccountLandingPagination(long accountId, long branchId)
+        {
+            return Ok((await _IRepository.GetBankAccountLandingPagination(accountId,branchId)));
+
+        }
     }
 }

@@ -17,6 +17,10 @@ namespace MGM_Lite.DBContext
         {
         }
 
+        public virtual DbSet<Bank> Banks { get; set; } = null!;
+        public virtual DbSet<BankAccount> BankAccounts { get; set; } = null!;
+        public virtual DbSet<BankAccountType> BankAccountTypes { get; set; } = null!;
+        public virtual DbSet<BankBranch> BankBranches { get; set; } = null!;
         public virtual DbSet<ChartOfAccCategory> ChartOfAccCategories { get; set; } = null!;
         public virtual DbSet<ChartofAcc> ChartofAccs { get; set; } = null!;
         public virtual DbSet<ChartofAccTemplate> ChartofAccTemplates { get; set; } = null!;
@@ -41,6 +45,66 @@ namespace MGM_Lite.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Bank>(entity =>
+            {
+                entity.ToTable("Bank");
+
+                entity.Property(e => e.BankCode).HasMaxLength(250);
+
+                entity.Property(e => e.BankName).HasMaxLength(300);
+
+                entity.Property(e => e.ShortName).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<BankAccount>(entity =>
+            {
+                entity.ToTable("BankAccount");
+
+                entity.Property(e => e.BankAccHolderName).HasMaxLength(250);
+
+                entity.Property(e => e.BankAccountNumber).HasMaxLength(250);
+
+                entity.Property(e => e.BankAccountTypeName).HasMaxLength(250);
+
+                entity.Property(e => e.BankBranchName).HasMaxLength(250);
+
+                entity.Property(e => e.BankName).HasMaxLength(250);
+
+                entity.Property(e => e.BankShortCode).HasMaxLength(50);
+
+                entity.Property(e => e.LastActionDatetime).HasColumnType("datetime");
+
+                entity.Property(e => e.RoutingNumber).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<BankAccountType>(entity =>
+            {
+                entity.ToTable("BankAccountType");
+
+                entity.Property(e => e.BankAccountTypeName).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<BankBranch>(entity =>
+            {
+                entity.ToTable("BankBranch");
+
+                entity.Property(e => e.BankBranchId).ValueGeneratedNever();
+
+                entity.Property(e => e.BankBranchCode).HasMaxLength(50);
+
+                entity.Property(e => e.BankBranchName).HasMaxLength(250);
+
+                entity.Property(e => e.BankCode).HasMaxLength(50);
+
+                entity.Property(e => e.BankName).HasMaxLength(250);
+
+                entity.Property(e => e.BankShortName).HasMaxLength(100);
+
+                entity.Property(e => e.District).HasMaxLength(250);
+
+                entity.Property(e => e.RoutingNo).HasMaxLength(100);
+            });
+
             modelBuilder.Entity<ChartOfAccCategory>(entity =>
             {
                 entity.ToTable("ChartOfAccCategory");

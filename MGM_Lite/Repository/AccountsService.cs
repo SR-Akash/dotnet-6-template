@@ -60,7 +60,7 @@ namespace MGM_Lite.Repository
             {
                 long accountId = create.Select(x => x.AccountId).FirstOrDefault();
 
-                var existingData = _context.ChartofAccs.Where(x => x.AccountId == accountId && x.TemplateId > 0).ToList();
+                var existingData = _context.ChartofAccs.Where(x => x.AccountId == accountId && x.TemplateId != 2 && x.TemplateId > 0).ToList();
                 if (existingData.Any())
                 {
                     var inActiveList = new List<Models.ChartofAcc>();
