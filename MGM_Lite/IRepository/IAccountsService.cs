@@ -13,5 +13,7 @@ namespace MGM_Lite.IRepository
         Task<List<ChartOfAccCategoryDTO>> GetChartOfAccCategoryList(long accountId);
         Task<JournalVoucherLandingPaginationDTO> GetJournalVoucherLandingPagination(long accountId, DateTime? fromDate, DateTime? toDate, string? search, string viewOrder, long pageNo, long pageSize);
         Task<JournalVoucherCommonDTO> GetJournalVoucherById(long journalId);
+        Task<object> GetBankAccountList(long accountId, long branchId);
+        Task<MessageHelper> CreateJournalVoucher(JournalVoucherCommonDTO obj);
     }
 }

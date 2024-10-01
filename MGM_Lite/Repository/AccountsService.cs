@@ -354,6 +354,34 @@ namespace MGM_Lite.Repository
                 throw ex;
             }
         }
+
+        public async Task<object> GetBankAccountList(long accountId, long branchId)
+        {
+            try
+            {
+                var data = (from b in _context.BankAccounts
+                            join c in _context.ChartofAccs on b.ChartofAccId equals c.ChartofAccId
+                            where b.BranchId == branchId
+                            && b.AccountId == accountId
+                            select new
+                            {
+                                BankAccountId = b.BankAccountId,
+                                ChartofAccId = b.ChartofAccId,
+                                BankAccountNumber = b.BankAccountNumber,
+                                ChartofAccName = c.ChartOfAccName
+                            }).ToList();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Task<MessageHelper> CreateJournalVoucher(JournalVoucherCommonDTO obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

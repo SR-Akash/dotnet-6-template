@@ -80,5 +80,21 @@ namespace MGM_Lite.Controllers
             return Ok((await _IRepository.GetJournalVoucherById(journalId)));
 
         }
+
+        [HttpGet]
+        [Route("GetBankAccountList")]
+        public async Task<IActionResult> GetBankAccountList(long accountId, long branchId)
+        {
+            return Ok((await _IRepository.GetBankAccountList(accountId,branchId)));
+
+        }
+
+        [HttpPost]
+        [Route("CreateJournalVoucher")]
+        public async Task<IActionResult> CreateJournalVoucher(JournalVoucherCommonDTO obj)
+        {
+            return Ok((await _IRepository.CreateJournalVoucher(obj)));
+
+        }
     }
 }

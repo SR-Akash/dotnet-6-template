@@ -33,6 +33,43 @@
   },
   {
     "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "CreateJournalVoucher",
+    "RelativePath": "api/Accounts/CreateJournalVoucher",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "obj",
+        "Type": "MGM_Lite.DTO.JournalVoucherCommonDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
+    "Method": "GetBankAccountList",
+    "RelativePath": "api/Accounts/GetBankAccountList",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "branchId",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MGM_Lite.Controllers.AccountsController",
     "Method": "GetChartOfAccCategoryList",
     "RelativePath": "api/Accounts/GetChartOfAccCategoryList",
     "HttpMethod": "GET",
